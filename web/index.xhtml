@@ -6,21 +6,73 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-   <f:view>
-      <h:head>
-         <title>library</title>
-      </h:head>
-      <h:body>
-         <p:panel style="width: 50%">
-         <p:dataTable value="#{indexBean.genres}" var="genre">
-            <p:column headerText="id">
-               <h:outputText value="#{genre.id}"/>
-            </p:column>
-            <p:column headerText="жанр">
-               <h:outputText value="#{genre.name}"/>
-            </p:column>
-         </p:dataTable>
-         </p:panel>
-      </h:body>
-   </f:view>
+<f:view>
+    <h:head>
+        <title>library</title>
+    </h:head>
+    <h:body>
+        <p:panel style="width: 50%" id="genres">
+            <h:form>
+            <p:dataTable value="#{indexBean.genres}" var="genre">
+                <p:column headerText="id">
+                    <h:outputText value="#{genre.id}"/>
+                </p:column>
+                <p:column headerText="жанр">
+                    <h:outputText value="#{genre.name}"/>
+                </p:column>
+                <p:column headerText="книги">
+                    <p:commandButton value="Найти" update="genres" action="#{indexBean.showBooksByGenre(genre)}"/>
+                </p:column>
+            </p:dataTable>
+            </h:form>
+            <p:panel rendered="#{not empty indexBean.currentGenre}" header="Жанр - #{indexBean.currentGenre.name}" >
+                <p:dataTable value="#{indexBean.currentGenre.books}" var="book">
+                    <p:column headerText="Автор">
+                        #{book.author.name}
+                    </p:column>
+                    <p:column headerText="Название">
+                        #{book.title}
+                    </p:column>
+                    <p:column headerText="стр">
+                        #{book.pages}
+                    </p:column>
+                </p:dataTable>
+                <h:form>
+                    <p:commandButton value="Скрыть" action="#{indexBean.hideBooksByGenre}" update="genres"/>
+                </h:form>
+            </p:panel>
+        </p:panel>
+        <p:panel style="width: 50%" id="authors" rendered="#{not empty indexBean.authors}">
+            <h:form>
+                <p:dataTable value="#{indexBean.authors}" var="author">
+                    <p:column headerText="№">
+                        #{author.id}
+                    </p:column>
+                    <p:column headerText="Имя">
+                        #{author.name}
+                    </p:column>
+                    <p:column headerText="год">
+                        #{author.year}
+                    </p:column>
+                    <p:column headerText="Книги">
+                        <p:commandLink value="Показать" action="#{indexBean.showBooks(author)}" update="authors"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <p:panel rendered="#{not empty indexBean.currentAuthor}"
+                     header="Книги автора: #{indexBean.currentAuthor.name}">
+                <p:dataTable value="#{indexBean.currentAuthor.books}" var="book">
+                    <p:column headerText="Название">
+                        #{book.title}
+                    </p:column>
+                    <p:column headerText="стр">
+                        #{book.pages}
+                    </p:column>
+                </p:dataTable>
+                <h:form><p:commandButton value="Скрыть" action="#{indexBean.hideBooksByAuthor}" update="authors"/>
+                </h:form>
+            </p:panel>
+        </p:panel>
+    </h:body>
+</f:view>
 </html>

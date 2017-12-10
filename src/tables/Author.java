@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Author.FindAll", query = "select a from Author a")
+})
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
